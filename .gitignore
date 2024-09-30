@@ -23,3 +23,6 @@
 database_data
 .php-cs-fixer.cache
 ###< local development needs ###
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
