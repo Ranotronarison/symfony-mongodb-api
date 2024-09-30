@@ -21,4 +21,5 @@
 
 ###> local development needs ###
 database_data
+.php-cs-fixer.cache
 ###< local development needs ###
