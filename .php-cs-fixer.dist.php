@@ -6,9 +6,7 @@ $finder = (new PhpCsFixer\Finder())
 
 return (new PhpCsFixer\Config())
   ->setRules([
-    '@PSR1' => true,
-    '@PSR2' => true,
     '@PSR12' => true,
+    'no_whitespace_before_comma_in_array' => true
   ])
-  ->setFinder($finder)
-;
+  ->setFinder($finder);
