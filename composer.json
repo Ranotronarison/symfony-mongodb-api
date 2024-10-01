@@ -83,9 +83,12 @@
         }
     },
     "require-dev": {
+        "doctrine/data-fixtures": "^1.7",
+        "phpunit/php-code-coverage": "^9.2",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.4.*",
         "symfony/css-selector": "6.4.*",
+        "symfony/http-client": "6.4.*",
         "symfony/phpunit-bridge": "^7.1"
     }
 }
