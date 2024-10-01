@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3.12",
+        "php": ">=8.2.24",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/doctrine-odm": "^4.0",
