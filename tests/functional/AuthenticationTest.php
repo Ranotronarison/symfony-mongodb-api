@@ -12,13 +12,13 @@ class AuthenticationTest extends ApiTestCase
             'POST',
             '/auth',
             [
-        'json' => ["email" => "test@test.com", "password" => "testpass"]
+        'json' => ['email' => 'test@test.com', 'password' => 'testpass']
         ]
         );
         $this->assertResponseStatusCodeSame(200);
 
         $data = $response->toArray();
-        $this->assertArrayHasKey("token", $data);
+        $this->assertArrayHasKey('token', $data);
     }
 
     public function testUnauthenticatedRequest()

@@ -16,10 +16,10 @@ class ArticlesApiTest extends ApiTestCase
         $application = new Application(self::bootKernel());
         $application->setAutoExit(false);
         $input = new ArrayInput([
-          "command" => "doctrine:mongodb:fixtures:load",
-          "--no-interaction" => true,
-          "--env" => "test",
-          "--quiet" => true
+          'command' => 'doctrine:mongodb:fixtures:load',
+          '--no-interaction' => true,
+          '--env' => 'test',
+          '--quiet' => true
         ]);
 
         $application->run($input);
@@ -31,11 +31,11 @@ class ArticlesApiTest extends ApiTestCase
             'POST',
             '/auth',
             [
-                'json' => ["email" => "test@test.com", "password" => "testpass"]
+                'json' => ['email' => 'test@test.com', 'password' => 'testpass']
             ]
         );
 
-        return $response->toArray()["token"];
+        return $response->toArray()['token'];
     }
 
     public function createArticle($name, $description, $price, $quantity): Article
@@ -61,7 +61,7 @@ class ArticlesApiTest extends ApiTestCase
             'GET',
             '/api/articles',
             [
-                "headers" => ["Authorization" => "Bearer ".$token]
+                'headers' => ['Authorization' => 'Bearer '.$token]
             ]
         );
         $this->assertResponseIsSuccessful();
@@ -74,12 +74,12 @@ class ArticlesApiTest extends ApiTestCase
             'POST',
             '/api/articles',
             [
-                "headers" => ["Authorization" => "Bearer ".$token],
-                "json" => [
-                    "name" => "New Article",
-                    "description" => "Article's description",
-                    "price" => 25.5,
-                    "quantity" => 5
+                'headers' => ['Authorization' => 'Bearer '.$token],
+                'json' => [
+                    'name' => 'New Article',
+                    'description' => "Article's description",
+                    'price' => 25.5,
+                    'quantity' => 5
                 ]
             ]
         );
@@ -89,13 +89,13 @@ class ArticlesApiTest extends ApiTestCase
 
     public function testGetArticleItem()
     {
-        $article = $this->createArticle("Article", "Article's description", 25.5, 5);
+        $article = $this->createArticle('Article', "Article's description", 25.5, 5);
         $token = $this->getToken();
         static::createClient()->request(
             'GET',
             '/api/articles/'.$article->getId(),
             [
-                "headers" => ["Authorization" => "Bearer ".$token]
+                'headers' => ['Authorization' => 'Bearer '.$token]
             ]
         );
         $this->assertResponseIsSuccessful();
@@ -103,13 +103,13 @@ class ArticlesApiTest extends ApiTestCase
 
     public function testHardDeleteArticle()
     {
-        $article = $this->createArticle("Article", "Article's description", 25.5, 5);
+        $article = $this->createArticle('Article', "Article's description", 25.5, 5);
         $token = $this->getToken();
         static::createClient()->request(
             'DELETE',
             '/api/articles/'.$article->getId(),
             [
-                "headers" => ["Authorization" => "Bearer ".$token]
+                'headers' => ['Authorization' => 'Bearer '.$token]
             ]
         );
         $this->assertResponseStatusCodeSame(204);
@@ -117,18 +117,18 @@ class ArticlesApiTest extends ApiTestCase
 
     public function testUpdateArticle()
     {
-        $article = $this->createArticle("Article", "Article's description", 25.5, 5);
+        $article = $this->createArticle('Article', "Article's description", 25.5, 5);
         $token = $this->getToken();
         static::createClient()->request(
             'PATCH',
             '/api/articles/'.$article->getId(),
             [
-                "headers" => [
-                    "content-type" => "application/merge-patch+json",
-                    "Authorization" => "Bearer ".$token
+                'headers' => [
+                    'content-type' => 'application/merge-patch+json',
+                    'Authorization' => 'Bearer '.$token
                 ],
-                "json" => [
-                    "name" => "Updated Article"
+                'json' => [
+                    'name' => 'Updated Article'
                 ]
             ]
         );

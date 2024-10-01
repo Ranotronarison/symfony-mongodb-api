@@ -9,17 +9,16 @@ use ApiPlatform\State\ProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
 class UserPasswordHasherTest extends TestCase
 {
-  /**
-   * @var ProcessorInterface&MockObject
-   */
+    /**
+     * @var ProcessorInterface&MockObject
+     */
     private ProcessorInterface $processor;
     /**
-   * @var UserPasswordHasherInterface&MockObject
-   */
+     * @var UserPasswordHasherInterface&MockObject
+     */
     private UserPasswordHasherInterface $hasher;
     private $userPasswordHasher;
 
@@ -54,7 +53,7 @@ class UserPasswordHasherTest extends TestCase
     {
         $user = $this->createMock(User::class);
         $operation = $this->createMock(Operation::class);
-        
+
         $user->method('getPlainPassword')->willReturn('plain_password');
 
         $this->hasher->expects($this->once())

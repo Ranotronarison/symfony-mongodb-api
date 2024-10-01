@@ -46,26 +46,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ODM\Id]
     private ?string $id = null;
 
-    #[ODM\Field(type: "string")]
+    #[ODM\Field(type: 'string')]
     #[Groups(['user:read', 'user:create', 'user:update'])]
     #[ODM\UniqueIndex()]
     private ?string $email = null;
 
-    #[ODM\Field(type: "string")]
+    #[ODM\Field(type: 'string')]
     private ?string $password = null;
 
     #[Assert\NotBlank(groups: ['user:create'])]
     #[Groups(['user:create', 'user:update'])]
     private ?string $plainPassword = null;
 
-    #[ODM\Field(type: "collection")]
+    #[ODM\Field(type: 'collection')]
     private ?array $roles = [];
 
-    #[ODM\Field(type: "date_immutable")]
+    #[ODM\Field(type: 'date_immutable')]
     #[Groups(['user:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ODM\Field(type: "date_immutable")]
+    #[ODM\Field(type: 'date_immutable')]
     #[Groups(['user:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
@@ -114,6 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
+
         return array_unique($roles);
     }
 

@@ -13,10 +13,10 @@ class UsersApiTest extends ApiTestCase
         $application = new Application(self::bootKernel());
         $application->setAutoExit(false);
         $input = new ArrayInput([
-          "command" => "doctrine:mongodb:fixtures:load",
-          "--no-interaction" => true,
-          "--env" => "test",
-          "--quiet" => true
+          'command' => 'doctrine:mongodb:fixtures:load',
+          '--no-interaction' => true,
+          '--env' => 'test',
+          '--quiet' => true
         ]);
 
         $application->run($input);
@@ -28,9 +28,9 @@ class UsersApiTest extends ApiTestCase
             'POST',
             '/api/users',
             [
-                "json" => [
-                    "email" => "test02@test.com",
-                    "plainPassword" => "testpass"
+                'json' => [
+                    'email' => 'test02@test.com',
+                    'plainPassword' => 'testpass'
                 ]
             ]
         );
@@ -44,11 +44,11 @@ class UsersApiTest extends ApiTestCase
             'POST',
             '/auth',
             [
-                'json' => ["email" => "test@test.com", "password" => "testpass"]
+                'json' => ['email' => 'test@test.com', 'password' => 'testpass']
             ]
         );
 
-        return $response->toArray()["token"];
+        return $response->toArray()['token'];
     }
 
     public function testGetUserCollection()
@@ -57,7 +57,7 @@ class UsersApiTest extends ApiTestCase
             'GET',
             '/api/articles',
             [
-                "headers" => ["Authorization" => "Bearer ".$this->getToken()]
+                'headers' => ['Authorization' => 'Bearer '.$this->getToken()]
             ]
         );
         $this->assertResponseIsSuccessful();
@@ -69,9 +69,9 @@ class UsersApiTest extends ApiTestCase
             'POST',
             '/api/users',
             [
-                "json" => [
-                    "email" => "test02@test.com",
-                    "plainPassword" => "testpass"
+                'json' => [
+                    'email' => 'test02@test.com',
+                    'plainPassword' => 'testpass'
                 ]
             ]
         );
@@ -84,9 +84,9 @@ class UsersApiTest extends ApiTestCase
             'POST',
             '/api/users',
             [
-                "json" => [
-                    "email" => "test02@test.com",
-                    "plainPassword" => "testpass"
+                'json' => [
+                    'email' => 'test02@test.com',
+                    'plainPassword' => 'testpass'
                 ]
             ]
         );
@@ -94,18 +94,18 @@ class UsersApiTest extends ApiTestCase
         $this->assertResponseStatusCodeSame(201);
         $data = $createUserResponse->toArray();
 
-        $newUserId = $data["id"];
+        $newUserId = $data['id'];
 
         static::createClient()->request(
             'PATCH',
             '/api/users/'. $newUserId,
             [
-                "headers" => [
-                    "content-type" => "application/merge-patch+json",
-                    "Authorization" => "Bearer ".$this->getToken()
+                'headers' => [
+                    'content-type' => 'application/merge-patch+json',
+                    'Authorization' => 'Bearer '.$this->getToken()
                 ],
-                "json" => [
-                    "plainPassword" => "newpassword"
+                'json' => [
+                    'plainPassword' => 'newpassword'
                 ]
             ]
         );
@@ -116,21 +116,21 @@ class UsersApiTest extends ApiTestCase
             'POST',
             '/auth',
             [
-                'json' => ["email" => "test02@test.com", "password" => "newpassword"]
+                'json' => ['email' => 'test02@test.com', 'password' => 'newpassword']
             ]
         );
 
         $this->assertResponseIsSuccessful();
-        $this->assertArrayHasKey("token", $loginResponse->toArray());
+        $this->assertArrayHasKey('token', $loginResponse->toArray());
     }
 
     public function testHardDeleteUser()
     {
         $user = $this->createUser();
         $deleteUserResponse = static::createClient()->request(
-            "DELETE",
-            "/api/users/" . $user["id"],
-            ["headers" => ["Authorization" => "Bearer ".$this->getToken()]]
+            'DELETE',
+            '/api/users/' . $user['id'],
+            ['headers' => ['Authorization' => 'Bearer '.$this->getToken()]]
         );
         $this->assertEquals(204, $deleteUserResponse->getStatusCode());
     }
