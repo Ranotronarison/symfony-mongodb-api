@@ -48,7 +48,13 @@ jobs:
           setfacl -dR -m u:www-data:rX -m u:\$(whoami):rwX config/jwt"
       -
         name: Run PHPUnit
-        run: docker compose exec -e XDEBUG_MODE=coverage -T php bin/phpunit --coverage-text
+        run: docker compose exec -e XDEBUG_MODE=coverage -T php bin/phpunit --coverage-clover=coverage/clover.xml
+      -
+        name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/clover.xml
   lint-dockerfile:
     name: Docker Lint
     runs-on: ubuntu-latest
