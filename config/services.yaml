@@ -33,3 +33,7 @@ services:
     App\Listener\AuthenticationFailureListener:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_not_found, method: onJWTNotFound }
+
+    App\Tests\TestUtils:
+        bind:
+            $kernel: '@kernel'

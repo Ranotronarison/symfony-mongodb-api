@@ -1,28 +1,20 @@
 <?php
 
-namespace App\Tests;
+namespace App\Functional\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
+use App\Tests\TestUtils;
 
 class UsersApiTest extends ApiTestCase
 {
+    private TestUtils $testUtils;
+
     public function setUp(): void
     {
-        $application = new Application(self::bootKernel());
-        $application->setAutoExit(false);
-        $input = new ArrayInput([
-          'command' => 'doctrine:mongodb:fixtures:load',
-          '--no-interaction' => true,
-          '--env' => 'test',
-          '--quiet' => true
-        ]);
-
-        $application->run($input);
+        $this->testUtils = new TestUtils(self::bootKernel());
     }
 
-    public function createUser()
+    public function createUser($email, $password)
     {
         $createUserResponse = static::createClient()->request(
             'POST',
@@ -53,11 +45,12 @@ class UsersApiTest extends ApiTestCase
 
     public function testGetUserCollection()
     {
+        $this->testUtils->launchFixtures(['users']);
         static::createClient()->request(
             'GET',
             '/api/articles',
             [
-                'headers' => ['Authorization' => 'Bearer '.$this->getToken()]
+                'headers' => ['Authorization' => 'Bearer ' . $this->getToken()]
             ]
         );
         $this->assertResponseIsSuccessful();
@@ -70,7 +63,7 @@ class UsersApiTest extends ApiTestCase
             '/api/users',
             [
                 'json' => [
-                    'email' => 'test02@test.com',
+                    'email' => 'testnewuser@test.com',
                     'plainPassword' => 'testpass'
                 ]
             ]
@@ -85,7 +78,7 @@ class UsersApiTest extends ApiTestCase
             '/api/users',
             [
                 'json' => [
-                    'email' => 'test02@test.com',
+                    'email' => 'test04@test.com',
                     'plainPassword' => 'testpass'
                 ]
             ]
@@ -98,11 +91,11 @@ class UsersApiTest extends ApiTestCase
 
         static::createClient()->request(
             'PATCH',
-            '/api/users/'. $newUserId,
+            '/api/users/' . $newUserId,
             [
                 'headers' => [
                     'content-type' => 'application/merge-patch+json',
-                    'Authorization' => 'Bearer '.$this->getToken()
+                    'Authorization' => 'Bearer ' . $this->getToken()
                 ],
                 'json' => [
                     'plainPassword' => 'newpassword'
@@ -116,7 +109,7 @@ class UsersApiTest extends ApiTestCase
             'POST',
             '/auth',
             [
-                'json' => ['email' => 'test02@test.com', 'password' => 'newpassword']
+                'json' => ['email' => 'test04@test.com', 'password' => 'newpassword']
             ]
         );
 
@@ -126,11 +119,11 @@ class UsersApiTest extends ApiTestCase
 
     public function testHardDeleteUser()
     {
-        $user = $this->createUser();
+        $user = $this->createUser('test@mail.com', 'testpass');
         $deleteUserResponse = static::createClient()->request(
             'DELETE',
             '/api/users/' . $user['id'],
-            ['headers' => ['Authorization' => 'Bearer '.$this->getToken()]]
+            ['headers' => ['Authorization' => 'Bearer ' . $this->getToken()]]
         );
         $this->assertEquals(204, $deleteUserResponse->getStatusCode());
     }
