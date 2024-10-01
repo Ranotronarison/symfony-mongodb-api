@@ -38,6 +38,14 @@ jobs:
       -
         name: Start services
         run: docker compose up --wait --no-build
+      - 
+        name: generate keys
+        run: |
+          docker compose exec php sh -c "set -e; 
+          apt-get install openssl; 
+          php bin/console lexik:jwt:generate-keypair; 
+          setfacl -R -m u:www-data:rX -m u:\$(whoami):rwX config/jwt; 
+          setfacl -dR -m u:www-data:rX -m u:\$(whoami):rwX config/jwt"
       -
         name: Run PHPUnit
         run: docker compose exec -T php bin/phpunit
