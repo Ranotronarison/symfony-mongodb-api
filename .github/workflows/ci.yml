@@ -48,8 +48,14 @@ jobs:
           setfacl -dR -m u:www-data:rX -m u:\$(whoami):rwX config/jwt"
       -
         name: Run PHPUnit
-        run: docker compose exec -T php bin/phpunit
-  lint:
+        run: docker compose exec -e XDEBUG_MODE=coverage -T php bin/phpunit --coverage-clover=coverage/clover.xml
+      -
+        name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/clover.xml
+  lint-dockerfile:
     name: Docker Lint
     runs-on: ubuntu-latest
     steps:
@@ -59,3 +65,15 @@ jobs:
       -
         name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
+  php-cs-fixer:
+    name: PHP CS Fixer
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Lint Php
+        uses: docker://oskarstark/php-cs-fixer-ga
+        with:
+          args: --config=.php-cs-fixer.dist.php --diff --dry-run

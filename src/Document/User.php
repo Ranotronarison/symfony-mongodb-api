@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\OpenApi\Model;
 
 #[ApiResource(
     operations: [
@@ -25,7 +26,14 @@ use Symfony\Component\Validator\Constraints as Assert;
     new GetCollection(),
     new Put(processor: UserPasswordHasher::class),
     new Patch(processor: UserPasswordHasher::class),
-    new Delete(),
+    new Delete(
+        openapi: new Model\Operation(
+            responses: [
+                '204' => new Model\Response(description: 'No Content'),
+                '404' => new Model\Response(description: 'Not Found'),
+            ]
+        )
+    ),
   ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:create', 'user:update']]
@@ -38,26 +46,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ODM\Id]
     private ?string $id = null;
 
-    #[ODM\Field(type: "string")]
+    #[ODM\Field(type: 'string')]
     #[Groups(['user:read', 'user:create', 'user:update'])]
     #[ODM\UniqueIndex()]
     private ?string $email = null;
 
-    #[ODM\Field(type: "string")]
+    #[ODM\Field(type: 'string')]
     private ?string $password = null;
 
     #[Assert\NotBlank(groups: ['user:create'])]
     #[Groups(['user:create', 'user:update'])]
     private ?string $plainPassword = null;
 
-    #[ODM\Field(type: "collection")]
+    #[ODM\Field(type: 'collection')]
     private ?array $roles = [];
 
-    #[ODM\Field(type: "date_immutable")]
+    #[ODM\Field(type: 'date_immutable')]
     #[Groups(['user:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ODM\Field(type: "date_immutable")]
+    #[ODM\Field(type: 'date_immutable')]
     #[Groups(['user:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
@@ -106,6 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
+
         return array_unique($roles);
     }
 

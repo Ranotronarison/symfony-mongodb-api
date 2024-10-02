@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3.12",
+        "php": ">=8.2.24",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/doctrine-odm": "^4.0",
@@ -84,6 +84,7 @@
     },
     "require-dev": {
         "doctrine/data-fixtures": "^1.7",
+        "friendsofphp/php-cs-fixer": "^3.64",
         "phpunit/php-code-coverage": "^9.2",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.4.*",
